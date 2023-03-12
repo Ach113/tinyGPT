@@ -14,6 +14,10 @@ class Dataset:
         self.atoi = {ch: self.vocab.index(ch) for ch in self.vocab}
         self.data = torch.tensor(self.encode(text), dtype=torch.long)
 
+    def train_test_split(self, test_size: float) -> Tuple[Tensor, Tensor]:
+        n = int(len(self.data) * (1 - test_size))
+        return self.data[:n], self.data[n:]
+
     def encode(self, s: str) -> List[int]:
         return [self.atoi[ch] for ch in s]
 
