@@ -1,20 +1,19 @@
-import torch
 from torch import Tensor
 from typing import Callable
 
-from config import device
+from config import *
 from data import get_batch
 from models import BigramModel
 
 
-def train_bigram(train_data: Tensor, vocab_size: int, batch_size: int, block_size: int,
-                 epochs: int, lr: float = 1e-3) -> torch.nn.Module:
+def train_bigram(train_data: Tensor, vocab_size: int,
+                 batch_size: int, epochs: int, lr: float = 1e-3) -> torch.nn.Module:
     model = BigramModel(vocab_size)
     model.to(device)
     optimizer = torch.optim.AdamW(model.parameters(), lr=lr)
 
     for i in range(epochs):
-        x, y = get_batch(train_data, batch_size, block_size)
+        x, y = get_batch(train_data, batch_size, BLOCK_SIZE)
         x, y = x.to(device), y.to(device)
         logits, loss = model(x, y)
         optimizer.zero_grad(set_to_none=True)
