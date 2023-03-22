@@ -3,24 +3,23 @@ from typing import Callable
 
 from config import *
 from data import get_batch
-from models import BigramModel
+from models import Transformer
 
 
-def train_bigram(train_data: Tensor, vocab_size: int,
-                 batch_size: int, epochs: int, lr: float = 1e-3) -> torch.nn.Module:
-    model = BigramModel(vocab_size)
+def train_transformer(train_data: Tensor, vocab_size: int) -> torch.nn.Module:
+    model = Transformer(vocab_size, num_blocks=NUM_BLOCKS)
     model.to(device)
-    optimizer = torch.optim.AdamW(model.parameters(), lr=lr)
+    optimizer = torch.optim.AdamW(model.parameters(), lr=LEARNING_RATE)
 
-    for i in range(epochs):
-        x, y = get_batch(train_data, batch_size, BLOCK_SIZE)
+    for i in range(NUM_EPOCHS):
+        x, y = get_batch(train_data, BATCH_SIZE, BLOCK_SIZE)
         x, y = x.to(device), y.to(device)
         logits, loss = model(x, y)
         optimizer.zero_grad(set_to_none=True)
         loss.backward()
         optimizer.step()
         if (i + 1) % 100 == 0:
-            print(f'Epoch {i + 1}/{epochs}, loss: {loss.item()}')
+            print(f'Epoch {i + 1}/{NUM_EPOCHS}, loss: {loss.item()}')
 
     return model
 

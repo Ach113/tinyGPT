@@ -1,5 +1,5 @@
 from data import Dataset
-from train import train_bigram, generate_text
+from train import train_transformer, generate_text
 
 
 def main():
@@ -7,7 +7,7 @@ def main():
     dataset = Dataset('tiny_shakespeare.txt')
     train, test = dataset.train_test_split(test_size=.1)
     # train model
-    model = train_bigram(train, dataset.vocab_size, batch_size=32, epochs=5000)
+    model = train_transformer(train, dataset.vocab_size)
     # generate text
     print(generate_text(model, 500, dataset.decode))
 
