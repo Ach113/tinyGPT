@@ -24,7 +24,7 @@ class Head(torch.nn.Module):
         query = self.query(x)
         wei = query @ key.transpose(-2, -1) * c**(-.5)  # scaling to prevent exploding softmax
         wei = torch.masked_fill(wei, self.tril[:t, :t] == 0, float('-inf'))  # incremental averaging using `tril`
-        wei = F.softmax(wei, dim=1)  # softmax to convert to probabilities
+        wei = F.softmax(wei, dim=-1)  # softmax to convert to probabilities
         wei = self.dropout(wei)
 
         return wei @ self.value(x)
