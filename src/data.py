@@ -6,7 +6,7 @@ from typing import List, Tuple
 class Dataset:
 
     def __init__(self, file_name: str):
-        with open(file_name, 'r') as f:
+        with open(file_name, 'r', encoding='utf-8') as f:
             text = f.read()
 
         self.vocab = sorted(list(set(text)))
